@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 const colors = document.getElementsByClassName("jsColor");
 const range = document.querySelector("#jsRange");
 const mode = document.querySelector("#jsMode");
+const saveBtn = document.querySelector("#jsSave");
 
 const INITIAL_COLOR = "#2c2c2c";
 const CANVAS_SIZE = 700;
@@ -10,13 +11,17 @@ const CANVAS_SIZE = 700;
 canvas.width = CANVAS_SIZE;
 canvas.height = CANVAS_SIZE;
 
+// 처음 생성될 때 배경 허옇게
+ctx.fillStyle = "#ffffff";
+// ctx.fillStyle = "green";
+ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+// ctx.fillRect(50, 20, 100, 49);
+// x, y, width, height
+
+// 기본 세팅
 ctx.strokeStyle = INITIAL_COLOR;
 ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
-// ctx.fillStyle = "green";
-
-// ctx.fillRect(50, 20, 100, 49);
-// x, y, width, height
 
 let painting = false;
 let filling = false;
@@ -76,12 +81,25 @@ function handleCanvasClick() {
   }
 }
 
+function handleCM(event) {
+  event.preventDefault();
+}
+
+function handleSaveClick() {
+  const image = canvas.toDataURL();
+  const link = document.createElement("a");
+  link.href = image;
+  link.download = "PaintJS[🖼]";
+  link.click();
+}
+
 if (canvas) {
   canvas.addEventListener("mousemove", onMouseMove);
   canvas.addEventListener("mousedown", startPainting); // 마우스 클릭중
   canvas.addEventListener("mouseup", stopPainting); // 마우스 클릭땜
   canvas.addEventListener("mouseleave", stopPainting); // 마우스가 떠남
   canvas.addEventListener("click", handleCanvasClick);
+  canvas.addEventListener("contextmenu", handleCM); // 마우스 우클릭
 }
 
 // Array.from() 는 object 로부터 array를 만듬
@@ -95,4 +113,8 @@ if (range) {
 
 if (mode) {
   mode.addEventListener("click", handleModeClick);
+}
+
+if (saveBtn) {
+  saveBtn.addEventListener("click", handleSaveClick);
 }
